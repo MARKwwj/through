@@ -151,7 +151,7 @@ func establishTunnel(tunnel *net.TCPConn) {
 
 	for key, connMatch := range connectionPool {
 		if connMatch.accept != nil {
-			go network.Join2Conn(connMatch.accept, tunnel)
+			go network.Join2Conn(tunnel, connMatch.accept)
 			delete(connectionPool, key)
 			return
 		}
