@@ -48,7 +48,7 @@ func CreateTcpConn(addr string) (*net.TCPConn, error) {
 
 func Join2Conn(local *net.TCPConn, remote *net.TCPConn) {
 	go JoinConn(local, remote)
-	// go JoinConn(remote, local)
+	go JoinConn(remote, local)
 }
 
 // Copy copies from remote to local
