@@ -14,19 +14,29 @@ import (
 	"strconv"
 	"sync"
 	"time"
-)
 
-const (
-	controlAddr = "0.0.0.0:8809"
-	tunnelAddr  = "0.0.0.0:8808"
-	visitAddr   = "0.0.0.0:8899"
+	"gopkg.in/ini.v1"
 )
 
 var (
+	controlAddr string
+	tunnelAddr  string
+	visitAddr   string
+
 	clientConn         *net.TCPConn
 	connectionPool     map[string]*ConnMatch
 	connectionPoolLock sync.Mutex
 )
+
+func init() {
+	f, err := ini.Load("./config/config.ini")
+	if err != nil {
+		log.Panicln(err)
+	}
+	controlAddr = f.Section("client").Key("controlAddr").String()
+	tunnelAddr = f.Section("client").Key("tunnelAddr").String()
+	visitAddr = f.Section("client").Key("visitAddr").String()
+}
 
 type ConnMatch struct {
 	addTime time.Time

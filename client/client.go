@@ -14,18 +14,28 @@ import (
 	"myCode/project/IntranetThrough/network"
 	"net"
 	"time"
+
+	"gopkg.in/ini.v1"
 )
 
 var (
 	//本地暴露的服务端口
-	localServerAddr = "127.0.0.1:3389"
-
-	remoteIp = "47.103.216.249"
+	localServerAddr string
 	//远端的服务控制通道，用来传递控制信息，如出现新连接和心跳
-	remoteControlAddr = remoteIp + ":8809"
+	remoteControlAddr string
 	//远端服务端口，用来建立隧道
-	remoteServerAddr = remoteIp + ":8808"
+	remoteServerAddr string
 )
+
+func init() {
+	f, err := ini.Load("./config/config.ini")
+	if err != nil {
+		log.Panicln(err)
+	}
+	localServerAddr = f.Section("client").Key("localServerAddr").String()
+	remoteControlAddr = f.Section("client").Key("remoteControlAddr").String()
+	remoteServerAddr = f.Section("client").Key("remoteServerAddr").String()
+}
 
 func main() {
 	tcpConn, err := network.CreateTcpConn(remoteControlAddr)
