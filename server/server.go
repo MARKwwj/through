@@ -124,7 +124,7 @@ func sendMessage(message string) {
 
 	_, err := clientConn.Write([]byte(message))
 	if err != nil {
-		log.Panicln("[发送消息异常]: message:" + message)
+		log.Println("[发送消息异常]: message:" + message)
 	}
 }
 
